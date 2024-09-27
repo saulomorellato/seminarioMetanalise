@@ -10,17 +10,6 @@ format:
 editor: visual
 ---
 
-```{r setup, include = FALSE}
-
-# options(htmltools.dir.version = FALSE)
-# knitr::opts_chunk$set(comment = "#>", fig.align = "center")
-# options(dplyr.print_min = 5, dplyr.print_max = 5, dplyr.width = 70)
-
-# library(knitr)
-# opts_chunk$set(fig.align='center', fig.width=4, fig.height=4.2, 
-# cache=TRUE, size="large")
-
-```
 
 # Introdução
 
