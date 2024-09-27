@@ -235,7 +235,7 @@ summary(resultados_ex1)
 ::: extrapad
 -   Observe nos resultados o valor de $I^2$ e o teste de heterogeneidade.
 
--   Se $I^2>50\%$ e/ou $p-value<0.05$, então use efeitos aleatórios;
+-   Se $I^2>50\%$ e/ou $p$-$value<0.05$, então use efeitos aleatórios;
 
 -   Caso contrário, utilize efeitos fixos.
 
