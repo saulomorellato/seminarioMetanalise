@@ -1,0 +1,450 @@
+---
+title: "Introdução à Metanálise em R/Rstudio"
+author: "Saulo Morellato"
+format: 
+  revealjs: 
+    css: custom.css
+    smaller: true
+    theme: serif
+    footer: "Departamento de Estatística - UFES"
+editor: visual
+---
+
+```{r setup, include = FALSE}
+
+# options(htmltools.dir.version = FALSE)
+# knitr::opts_chunk$set(comment = "#>", fig.align = "center")
+# options(dplyr.print_min = 5, dplyr.print_max = 5, dplyr.width = 70)
+
+# library(knitr)
+# opts_chunk$set(fig.align='center', fig.width=4, fig.height=4.2, 
+# cache=TRUE, size="large")
+
+```
+
+# Introdução
+
+## Revisão Sistemática vs Metanálise
+
+::: extrapad
+-   Revisões sistemáticas e metanálises são dois tipos distintos de estudos secundários.
+
+-   As revisões sistemáticas têm objetivo de identificar, obter, filtrar, avaliar e sintetizar (ou resumir) os estudos primários relevantes para responder uma dada pergunta de pesquisa.
+
+-   Revisões sistemáticas podem ou não serem seguidas por metanálise.
+
+-   A metanálise pode ser entendida como um conjunto de métodos estatísticos que permite combinar os resultados de dois ou mais estudos independentes em uma única medida.
+:::
+
+## O que é Metanálise?
+
+![](fig01.png){width="80%"}
+
+## Do que preciso para fazer uma Metanálise?
+
+::: extrapad
+-   Reunir diferentes estudos com o mesmo desfecho;
+
+-   Tais estudos devem ter o mesmo deleniamento (ou, no mínimo, muito próximos);
+
+-   Os estudos devem apresentar algumas informações necessárias para que a combinação dos resultados seja possível;
+:::
+
+# Metanálise na Saúde
+
+## Metanálise na Saúde
+
+::: extrapad
+-   Na área da saúde o mais comum é a realização de metanálise para combinar resultados de estudos que comparam diferentes tecnologias (medicamentos, tratamentos, procedimentos, etc.)
+
+-   Estes estudos apresentam, em geral, estimativas para medidas de associação, tais como, razão de chances e o risco relativo, ou ainda estimativas para diferença de médias.
+:::
+
+# Aplicações em R
+
+## Exemplos
+
+Vamos considerar dois exemplos de aplicação de metanálise:
+
+::: extrapad
+-   **Exemplo 1**: desfecho numérico (variável quantitativa).
+
+-   **Exemplo 2**: desfecho binário (variável qualitativa).
+:::
+
+## Exemplo 1
+
+::: extrapad
+-   **Artigo**: Fleiss JL (1993): The statistical basis of meta-analysis. *Statistical Methods in Medical Research*, 2, 121–45.
+
+-   **Objetivo**: Estudar o efeito da psicoterapia em pacientes hospitalizados por razões médicas.
+
+-   **Desfecho**: Número dias no hospital.
+:::
+
+## Carregando Pacotes
+
+::: extrapad
+-   Para exemplificar a aplicação de uma metanálise em R vamos utilizar conjunto de dados `dados_num.xlsx`.
+
+-   Para isso primeiramente vamos carregar os pacotes necessários.
+:::
+
+```{r}
+#| label: pacotes
+#| echo: true
+#| warning: false
+
+library(readxl)     # para carregar dados em excel
+library(meta)       # para executar a metanalise
+```
+
+```{css}
+code.sourceCode {
+  font-size: 1.5em;
+  /* or try font-size: xx-large; */
+}
+```
+
+## Carregando os Dados
+
+::: extrapad
+-   Carregue o arquivo `dados_num.xlsx` utilizando o comando `read_excel()`.
+
+```{r}
+#| label: dados
+#| echo: true
+
+dados_num<- read_excel("dados_num.xlsx")
+```
+
+-   Dê uma olhada nos dados usando o comando `dados_num` o qual expoe o objeto no qual guardamos os dados anteriormente.
+
+```{r}
+#| echo: false
+
+dados_num<- data.frame(dados_num)
+```
+
+```{r}
+#| label: view
+#| echo: true
+#| output: true
+
+dados_num
+```
+
+```{css}
+code.sourceCode {
+  font-size: 1.5em;
+  /* or try font-size: xx-large; */
+}
+```
+:::
+
+## Informações necessárias para a metanálise
+
+::: extrapad
+-   número de indivíduos dos grupos tratamento e controle;
+
+-   médias obtidas nos grupos tratamento e controle; e
+
+-   desvio padrão dos grupos tratamento e controle.
+:::
+
+## Executando os cálculos da metanálise
+
+Para ajustar/estimar uma metanálise de diferença de médias devemos utilizar o comando `metacont()`, ao qual devemos fornecer as seguintes informações (nesta ordem):
+
+::: extrapad
+-   *n*, média e desvio padrão do grupo tratamento;
+
+-   *n*, média e desvio padrão do grupo controle;
+
+-   o conjunto de dados onde estão guardadas tais informações; e
+
+-   a identificação dos estudos.
+:::
+
+## Executando o comando `metacont()`
+
+Agora vamos executar o comando `metacont()` e armazenar os resultados no objeto `resultados_ex1`.
+
+```{r}
+#| label: ex1
+#| echo: true
+
+resultados_ex1<- metacont(n.psyc,
+                          mean.psyc,
+                          sd.psyc,
+                          n.cont,
+                          mean.cont,
+                          sd.cont,
+                          data = dados_num,
+                          studlab = study)
+```
+
+```{css}
+code.sourceCode {
+  font-size: 1.5em;
+  /* or try font-size: xx-large; */
+}
+```
+
+## Visualizando os Resultados
+
+::: extrapad
+-   A função `summary()` pode ser utilizada para visualizarmos um resumo dos resultados obtidos na metanálise.
+
+-   Deve-se observar que este comando apresenta os resultados de uma forma um pouco poluída, porém bem completa.
+
+-   Apliquemos este comando para o objeto `resultados_ex1`.
+:::
+
+## Visualização - `summary()`
+
+::: panel-tabset
+### Code
+
+```{r}
+#| echo: true
+#| eval: false
+
+summary(resultados_ex1)
+```
+
+```{css}
+code.sourceCode {
+  font-size: 1.5em;
+  /* or try font-size: xx-large; */
+}
+```
+
+### Output
+
+```{r}
+#| eval: true
+#| echo: false
+
+summary(resultados_ex1)
+```
+:::
+
+## Efeitos Fixos ou Aleatórios?
+
+::: extrapad
+-   Observe nos resultados o valor de $I^2$ e o teste de heterogeneidade.
+
+-   Se $I^2>50\%$ e/ou $p-value<0.05$, então use efeitos aleatórios;
+
+-   Caso contrário, utilize efeitos fixos.
+
+-   No exemplo 1 utilizaremos efeitos fixos.
+:::
+
+## Forest Plot
+
+::: extrapad
+-   Para visualizar gráficamente os resultados da metanálise utilizamos o comando `forest()` usando como argumento o objeto `resultados_ex1`.
+
+-   Como consideramos efeitos fixos utilizaremos o argumento `random=FALSE`.
+
+-   Caso queira efeitos aleatórios utilize o argumento `fixed=FALSE`.
+:::
+
+## Visualização - `forest()`
+
+::: panel-tabset
+### Code
+
+```{r}
+#| echo: true
+#| eval: false
+
+forest(resultados_ex1,
+       random = FALSE,
+       test.overall = TRUE)
+```
+
+### Output
+
+```{r}
+#| eval: true
+#| echo: false
+
+forest(resultados_ex1,
+       random = FALSE,
+       test.overall = TRUE)
+```
+:::
+
+
+
+## Exemplo 2
+
+::: extrapad
+-   **Artigo**: Fleiss JL (1993): The statistical basis of meta-analysis. *Statistical Methods in Medical Research*, 2, 121–45.
+
+-   **Objetivo**: Estudar o efeito da aspirina na prevenção da morte após infarto do miocárdio.
+
+-   **Desfecho**: Morte do paciente após certo intervalo de tempo.
+:::
+
+
+
+## Carregando os Dados
+
+::: extrapad
+-   Carregue o arquivo `dados_bin.xlsx` utilizando o comando `read_excel()`.
+
+```{r}
+#| label: dados2
+#| echo: true
+
+dados_bin<- read_excel("dados_bin.xlsx")
+```
+
+-   Dê uma olhada nos dados usando o comando `dados_bin` o qual expoe o objeto no qual guardamos os dados anteriormente.
+
+```{r}
+#| echo: false
+
+dados_bin<- data.frame(dados_bin)
+```
+
+```{r}
+#| label: view2
+#| echo: true
+#| output: true
+
+dados_bin
+```
+
+```{css}
+code.sourceCode {
+  font-size: 1.5em;
+  /* or try font-size: xx-large; */
+}
+```
+:::
+
+## Informações necessárias para a metanálise
+
+::: extrapad
+-   número de eventos nos grupos tratamento e controle; e
+
+-   número de pacientes nos grupos tratamento e controle
+:::
+
+
+## Executando os cálculos da metanálise
+
+Para ajustar/estimar uma metanálise de diferença de médias devemos utilizar o comando `metabin()`, ao qual devemos fornecer as seguintes informações (nesta ordem):
+
+-   número de eventos (mortes) do grupo tratamento;
+
+-   número de pacientes no grupo tratamento;
+
+-   número de eventos do grupo controle;
+
+-   número de pacientes no grupo controle;
+
+-   o conjunto de dados onde estão guardadas tais informações; e
+
+-   a identificação dos estudos.
+
+
+
+## Executando o comando `metabin()`
+
+Agora vamos executar o comando `metabin()` e armazenar os resultados no objeto `resultados_ex2`.
+
+```{r}
+#| label: ex2
+#| echo: true
+
+resultados_ex2<- metabin(n.asp,
+                         N.asp,
+                         n.plac,
+                         N.plac,
+                         data = dados_bin,
+                         studlab = study,
+                         sm = "OR")
+```
+
+```{css}
+code.sourceCode {
+  font-size: 1.5em;
+  /* or try font-size: xx-large; */
+}
+```
+
+
+## Visualização - `summary()`
+
+::: panel-tabset
+### Code
+
+```{r}
+#| echo: true
+#| eval: false
+
+summary(resultados_ex2)
+```
+
+```{css}
+code.sourceCode {
+  font-size: 1.5em;
+  /* or try font-size: xx-large; */
+}
+```
+
+### Output
+
+```{r}
+#| eval: true
+#| echo: false
+
+summary(resultados_ex2)
+```
+:::
+
+
+## Forest Plot
+
+::: extrapad
+-   Para visualizar gráficamente os resultados da metanálise utilizamos o comando `forest()` usando como argumento o objeto `resultados_ex2`.
+
+-   Como consideramos efeitos fixos utilizaremos o argumento `random=FALSE`.
+
+-   Caso queira efeitos aleatórios utilize o argumento `fixed=FALSE`.
+:::
+
+## Visualização - `forest()`
+
+::: panel-tabset
+### Code
+
+```{r}
+#| echo: true
+#| eval: false
+
+forest(resultados_ex2,
+       random = FALSE,
+       test.overall = TRUE)
+```
+
+### Output
+
+```{r}
+#| eval: true
+#| echo: false
+
+forest(resultados_ex2,
+       random = FALSE,
+       test.overall = TRUE)
+```
+:::
+
+
+# Isso é tudo por agora!
