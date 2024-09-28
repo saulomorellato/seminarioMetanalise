@@ -68,7 +68,7 @@ Vamos considerar dois exemplos de aplicação de metanálise:
 
 -   **Objetivo**: Estudar o efeito da psicoterapia em pacientes hospitalizados por razões médicas.
 
--   **Desfecho**: Número dias no hospital.
+-   **Desfecho**: Número de dias no hospital.
 :::
 
 ## Carregando Pacotes
